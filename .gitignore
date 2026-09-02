@@ -1,0 +1,17 @@
+node_modules/
+out/
+dist/
+coverage/
+.nyc_output/
+.pnpm-store/
+*.vsix
+*.tgz
+*.log
+.eslintcache
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+.idea/
+.vscode-test/

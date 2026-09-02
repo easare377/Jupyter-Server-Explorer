@@ -1,0 +1,166 @@
+{
+  "name": "vscode-jupyter-remote",
+  "displayName": "Jupyter Remote Files",
+  "description": "Browse and edit files on a remote Jupyter server through the Jupyter Contents API, without SSH.",
+  "version": "0.1.3",
+  "publisher": "local-development",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/easare377/Jupyter-Server-Explorer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/easare377/Jupyter-Server-Explorer/issues"
+  },
+  "homepage": "https://github.com/easare377/Jupyter-Server-Explorer#readme",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other",
+    "Notebooks"
+  ],
+  "keywords": [
+    "jupyter",
+    "remote",
+    "filesystem",
+    "notebook"
+  ],
+  "extensionKind": [
+    "ui"
+  ],
+  "main": "./out/src/extension.js",
+  "activationEvents": [
+    "onFileSystem:jupyter",
+    "onView:jupyterRemote.servers",
+    "onNotebook:jupyter-notebook"
+  ],
+  "extensionDependencies": [
+    "ms-toolsai.jupyter"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "jupyterRemote.addServer",
+        "title": "Jupyter Remote: Add Server",
+        "icon": "$(add)"
+      },
+      {
+        "command": "jupyterRemote.removeServer",
+        "title": "Jupyter Remote: Remove Server",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "jupyterRemote.connectServer",
+        "title": "Jupyter Remote: Test Connection",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "jupyterRemote.updateCredentials",
+        "title": "Jupyter Remote: Update Credentials",
+        "icon": "$(key)"
+      },
+      {
+        "command": "jupyterRemote.openRemoteFolder",
+        "title": "Jupyter Remote: Open Remote Folder",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "jupyterRemote.refresh",
+        "title": "Jupyter Remote: Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "jupyterRemote.openResource",
+        "title": "Jupyter Remote: Open Resource"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "jupyterRemote.servers",
+          "name": "Jupyter Servers"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "jupyterRemote.addServer",
+          "when": "view == jupyterRemote.servers",
+          "group": "navigation@1"
+        },
+        {
+          "command": "jupyterRemote.refresh",
+          "when": "view == jupyterRemote.servers",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "jupyterRemote.openRemoteFolder",
+          "when": "view == jupyterRemote.servers && viewItem == jupyterRemote.server",
+          "group": "inline@1"
+        },
+        {
+          "command": "jupyterRemote.connectServer",
+          "when": "view == jupyterRemote.servers && viewItem == jupyterRemote.server",
+          "group": "navigation@1"
+        },
+        {
+          "command": "jupyterRemote.updateCredentials",
+          "when": "view == jupyterRemote.servers && viewItem == jupyterRemote.server",
+          "group": "navigation@2"
+        },
+        {
+          "command": "jupyterRemote.removeServer",
+          "when": "view == jupyterRemote.servers && viewItem == jupyterRemote.server",
+          "group": "navigation@9"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Jupyter Remote",
+      "properties": {
+        "jupyterRemote.requestTimeout": {
+          "type": "number",
+          "default": 30000,
+          "minimum": 1000,
+          "maximum": 300000,
+          "description": "Timeout in milliseconds for Jupyter Server REST API requests."
+        },
+        "jupyterRemote.writeRequestTimeout": {
+          "type": "number",
+          "default": 180000,
+          "minimum": 1000,
+          "maximum": 900000,
+          "description": "Timeout in milliseconds for Jupyter Server file writes, renames, and deletes. Notebook save hooks can make these operations substantially slower than reads."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "compile": "tsc -p .",
+    "check": "tsc -p . --noEmit",
+    "lint": "eslint src test",
+    "test": "pnpm run compile && node --test out/test/*.test.js",
+    "package": "pnpm run clean && pnpm run compile && vsce package --no-dependencies --allow-missing-repository",
+    "vscode:prepublish": "pnpm run compile"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.0",
+    "@types/vscode": "1.95.0",
+    "@vscode/vsce": "^3.6.0",
+    "@vscode/jupyter-extension": "^1.0.0",
+    "eslint": "^9.17.0",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0"
+  }
+}
